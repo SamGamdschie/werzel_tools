@@ -20,9 +20,9 @@ echo "Start Letsencrypt in Renewal Mode"
 #jexec -n letsencrypt letsencrypt certonly --duplicate --renew-by-default -c /etc/letsencrypt/cli.ini -d mail.werzel.de -d webmail.werzel.de -d squirrel.werzel.de -d automx.werzel.de -d autoconfig.werzel.de -d autodiscover.werzel.de
 # RENEWAL ONLY!
 if [ "1" = $dryrun ]; then
-  jexec -n letsencrypt letsencrypt renew --dry-run
+  jexec -n letsencrypt certbot renew --dry-run
 else
-  jexec -n letsencrypt letsencrypt renew
+  jexec -n letsencrypt certbot renew
 fi
 
 ## Redirect Port 443 back to Jail Proxy

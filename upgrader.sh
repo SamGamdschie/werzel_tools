@@ -27,8 +27,12 @@ stty -raw echo
 # Update Root Repository
 if [ "$char" = "y" ]; then
   freebsd-update install
-  pkg update
   portupgrade -a
+  csh -t rehash
+  # delete outdated ports data
+  find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
+  find /var/ports/distfiles/* -maxdepth 1 -mtime +30 -exec rm -rf {} \;
+  pkg update
   csh -t rehash
 fi
 
@@ -54,7 +58,7 @@ for jailname in $jails
   stty -raw echo
   # Update Jail Repository
   if [ "$char" = "y" ]; then
-    jexec -n $jailname pkg update
+    #jexec -n $jailname pkg update // packages will be compiled from ports tree
     jexec -n $jailname portupgrade -a
     jexec -n $jailname csh -t rehash
     if [ "$jailname" = "ssl" ]; then
@@ -63,6 +67,9 @@ for jailname in $jails
       jexec -n $jailname chown -R mail.werzel.de:www /usr/local/www/roundcube
       jexec -n $jailname chown -R squirrel.werzel:www /usr/local/www/squirrelmail
     fi
+    # delete outdated ports data
+    jexec -n $jailname find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
+    jexec -n $jailname find /var/ports/distfiles/* -maxdepth 2 -mtime +30 -exec rm -rf {} \;
   fi
 
   pkg version -l "<"
