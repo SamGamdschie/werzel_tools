@@ -1,6 +1,8 @@
-# werzel_tools
-Tools and Snippets for FreeBSD administration
+# Werzel Tools
+Tools and Snippets for my FreeBSD administration
 
 ### Scripts
+
+
 
 ### Snippets
