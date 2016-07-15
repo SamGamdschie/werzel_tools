@@ -1,4 +1,7 @@
 #!/usr/local/bin/zsh
+### Automatic upgrade for ports (and pkg on root system)
+### for root system and all defined jails
+
 # Array of Jails
 jails=(db mail proxy www ssl admin letsencrypt vpn)
 
