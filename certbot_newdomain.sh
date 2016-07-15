@@ -1,8 +1,6 @@
 #!/usr/local/bin/zsh
 ### This helper script will stop firewall for port 443 and redirect this to letsencrypt jails
 ### Now letsencrypt can either dump "dry-run" data or renew certificate with new domain
-
-logfile=/var/log/letsencrypt.log
 #letsencrypt dryrun
 dryrun=1
 
@@ -12,14 +10,6 @@ if [ "$1" = "newcert" ]; then
       dryrun=1
    fi
 fi
-
-
-#Remove Logfile prior to use.
-rm -f  $logfile
-
-exec > $logfile
-exec 2>&1
-echo "Starting Letsencrypt for new domains at `date`"
 
 ## Redirect Port 443 to Jail Letsencrypt
 echo "Start Firewall with 443 to letsencrypt"
@@ -33,7 +23,8 @@ if [ $dryrun =  1 ]; then
   # RENEWAL ONLY!
   echo "Start Letsencrypt as Dry Run"
   jexec -n letsencrypt certbot renew --dry-run
-  jexec -n letsencrypt cat /var/log/letsencrypt/letsencrypt.log
+  echo "Please review domains from letsencrypt logfile:"
+  echo "less /usr/jails/letsencrypt/var/log/letsencrypt/letsencrypt.log"
 else
   ### This will only be started with additional parameter: Add additional domain names to the list from cert.
   ### Enter domain list manually here
@@ -47,4 +38,3 @@ pfctl -f /etc/pf.conf
 
 # Send mail with results
 echo "Ending Letsencrypt for new domains at `date`, sending mail with results"
-mail -s "Result of new Letsencrypt domains" root@mail.werzel.de <$logfile
