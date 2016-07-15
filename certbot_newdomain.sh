@@ -6,10 +6,10 @@ logfile=/var/log/letsencrypt.log
 #letsencrypt dryrun
 dryrun=1
 
-if [ $1 =  "newcert" ]; then
+if [ "$1" = "newcert" ]; then
    dryrun=0
 fi
-if [ $2 =  "" ]; then
+if [ "$2" = "" ]; then
    dryrun=0
 fi
 
@@ -28,7 +28,7 @@ pfctl -f /etc/pf-letsencrypt.conf
 echo "Start Letsencrypt in Renewal Mode"
 # Mail and mail related
 #jexec -n letsencrypt certbot certonly --duplicate --renew-by-default -c /etc/letsencrypt/cli.ini -d mail.werzel.de -d webmail.werzel.de -d squirrel.werzel.de -d automx.werzel.de -d autoconfig.werzel.de -d autodiscover.werzel.de
-if [ $dryrun =  "1" ]; then
+if [ $dryrun =  1 ]; then
   # Normally start dry run to write log with domain info from cert
   # RENEWAL ONLY!
   jexec -n letsencrypt certbot renew --dry-run

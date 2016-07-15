@@ -3,19 +3,18 @@
 ### Now letsencrypt can either dump "dry-run" data or renew certificate with new domain
 validdomain=0
 
-if [ $1 = "www" ]; then
+if [ "$1" = "www" ]; then
    validdomain=1
 fi
-if [ $1 = "ssl" ]; then
+if [ "$1" = "ssl" ]; then
    validdomain=1
 fi
-if [ $1 = "admin" ]; then
+if [ "$1" = "admin" ]; then
    validdomain=1
 fi
-if [ $2 = "" ]; then
+if [ "$2" = "" ]; then
    validdomain=0
 fi
-
 
 if [ $validdomain = 1 ]; then
   jail=$1
@@ -25,7 +24,7 @@ if [ $validdomain = 1 ]; then
   jexec -n $jail pw group mod $user -m www
 
   ### Directories and Permissions
-  $dir=/www/vhosts/$user
+  dir=/www/vhosts/$user
   jexec -n $jail mkdir $dir
   jexec -n $jail cd $dir && mkdir log sessions tmp htdocs
   jexec -n $jail chown -R $user:$user $dir
@@ -37,6 +36,8 @@ if [ $validdomain = 1 ]; then
 
   jexec -n $jail find $dir/htdocs/ -type d -exec chmod 550 {} \;
   jexec -n $jail find $dir/htdocs/ -type f -exec chmod 440 {} \;
+
+  echo "User created, directory created, permissions set: Set up NGINX & Proxy"
 
 else
 

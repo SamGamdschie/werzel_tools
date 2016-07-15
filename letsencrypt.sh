@@ -2,6 +2,9 @@
 logfile=/var/log/letsencrypt.log
 #letsencrypt dryrun
 dryrun=0
+if [ "$1" = "$dryrun" ]; then
+  dryrun=1
+fi
 
 #Remove Logfile prior to use.
 rm -f  $logfile
@@ -19,7 +22,7 @@ echo "Start Letsencrypt in Renewal Mode"
 # Mail and mail related
 #jexec -n letsencrypt letsencrypt certonly --duplicate --renew-by-default -c /etc/letsencrypt/cli.ini -d mail.werzel.de -d webmail.werzel.de -d squirrel.werzel.de -d automx.werzel.de -d autoconfig.werzel.de -d autodiscover.werzel.de
 # RENEWAL ONLY!
-if [ "1" = $dryrun ]; then
+if [ "1" = "$dryrun" ]; then
   jexec -n letsencrypt certbot renew --dry-run
 else
   jexec -n letsencrypt certbot renew
