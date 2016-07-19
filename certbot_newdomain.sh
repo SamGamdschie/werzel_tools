@@ -11,10 +11,6 @@ if [ "$1" = "newcert" ]; then
    fi
 fi
 
-## Redirect Port 443 to Jail Letsencrypt
-echo "Start Firewall with 443 to letsencrypt"
-pfctl -f /etc/pf-letsencrypt.conf
-
 # Generate new certificates (up to 100 domains / subdomains per request, only 5 requests per week!)
 # Mail and mail related
 #jexec -n letsencrypt certbot certonly  --duplicate --renew-by-default -c /etc/letsencrypt/cli.ini -d mail.werzel.de -d webmail.werzel.de -d squirrel.werzel.de -d automx.werzel.de -d autoconfig.werzel.de -d autodiscover.werzel.de
@@ -29,15 +25,19 @@ if [ $dryrun =  1 ]; then
   echo "less /usr/jails/letsencrypt/var/log/letsencrypt/letsencrypt.log"
   echo ""
 else
+  ## Redirect Port 443 to Jail Letsencrypt
+  echo "Start Firewall with 443 to letsencrypt"
+  pfctl -f /etc/pf-letsencrypt.conf
+
   ### This will only be started with additional parameter: Add additional domain names to the list from cert.
   ### Enter domain list manually here
   echo "Start Letsencrypt to Extend Domain"
   jexec -n letsencrypt certbot certonly standalone --expand -d $2
-fi
 
-## Redirect Port 443 back to Jail Proxy
-echo "Start Firewall with normal configuration"
-pfctl -f /etc/pf.conf
+  ## Redirect Port 443 back to Jail Proxy
+  echo "Start Firewall with normal configuration"
+  pfctl -f /etc/pf.conf
+fi
 
 # Send mail with results
 echo "Ending Letsencrypt for new domains at `date`, sending mail with results"
