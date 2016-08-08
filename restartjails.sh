@@ -6,14 +6,16 @@ phpjails=(www ssl admin)
 ## Remove Log & start logging
 echo "Starting Jailrestart  at `date`"
 
-echo "Stopping Jails"
+echo "Stopping all Jails now:"
 # Now update in all jails
 for jailname in $jails
   do
   ezjail-admin onestop $jailname
 done
 
-echo "Starting Jails"
+echo "All jails are stopped now."
+echo ""
+echo "Starting Jails again in same order:"
 for jailname in $jails
   do
   ezjail-admin onestart $jailname
@@ -25,4 +27,3 @@ for jailname in $phpjails
   jexec -n $jailname  service php-fpm stop
   jexec -n $jailname  service php-fpm start
 done
-
