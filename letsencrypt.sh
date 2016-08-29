@@ -1,5 +1,8 @@
 #!/usr/local/bin/zsh
 logfile=/var/log/letsencrypt.log
+#emailaddr=root@mail.werzel.de
+emailaddr=server.mail@werzel.de
+
 #letsencrypt dryrun
 dryrun=0
 if [ "$1" = "$dryrun" ]; then
@@ -74,4 +77,4 @@ fi
 
 # Send mail with results
 echo "Ending Letsencrypt at `date`, sending mail with results"
-mail -s "Result of Letsencrypt" root@mail.werzel.de <$logfile
+mail -s "Result of Letsencrypt" $emailaddr <$logfile

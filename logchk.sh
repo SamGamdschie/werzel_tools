@@ -1,5 +1,6 @@
 #!/usr/local/bin/zsh
 logfile=/var/log/logchk.log
+emailaddr=root@mail.werzel.de
 
 exec > $logfile
 exec 2>&1
@@ -18,6 +19,6 @@ echo "#### POSTFIX ####"
 grep "postfix\/smtpd.*connect .*" /usr/jails/mail/var/log/maillog | grep -v "werzel\.de" | grep -v "versanet\.de"
 
 # Send mail with results
-mail -s "Result of Logchecker" root@mail.werzel.de <$logfile
+mail -s "Result of Logchecker" $emailaddr <$logfile
 #Log sent, remove it.
 rm -f  $logfile

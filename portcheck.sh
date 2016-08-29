@@ -3,6 +3,8 @@
 jails=(db mail proxy www ssl admin letsencrypt vpn)
 logfile=/var/log/portcheck.log
 tmplog=/var/log/portcheck.tmp.log
+#emailaddr=root@mail.werzel.de
+emailaddr=server.mail@werzel.de
 fetchtdata=1
 
 ## Start logging
@@ -50,7 +52,6 @@ done
 
 echo "### ### Stopping Portcheck at `date`, sending mail with results ### ###"
 grep -v "Upgrad" $tmplog | grep -v "^OK? \[no\]" | grep -v "^\[Reading data from pkg" | grep -v "packages found \- done" >$logfile
-mail -s "Result of Automatic Updates" root@mail.werzel.de <$logfile
+mail -s "Result of Automatic Updates" $emailaddr <$logfile
 #Log sent, renove it.
 rm -f $tmplog
-
