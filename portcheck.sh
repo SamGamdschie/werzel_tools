@@ -15,11 +15,13 @@ echo "### ### Starting Portcheck at `date` ### ###"
 
 if [ "$fetchdata" = "1" ]; then
 # Update Root Repository
-  echo "### ### Fetch FreeBSD and Port Updates ### ###"
+  echo "### ### Fetch FreeBSD and Source Updates ### ###"
   freebsd-update -t root@mail.werzel.de cron
-  portsnap fetch update >/dev/null
   svn update /usr/src >/dev/null
 fi
+
+echo "### ### Fetch Port Updates ### ###"
+portsnap fetch update >/dev/null
 
 echo "### ### Checking Root-System ### ###"
 pkg version -l "<"

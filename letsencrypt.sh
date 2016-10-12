@@ -5,7 +5,7 @@ emailaddr=server.mail@werzel.de
 
 #letsencrypt dryrun
 dryrun=0
-if [ "$1" = "$dryrun" ]; then
+if [ "$1" = "dryrun" ]; then
   dryrun=1
 fi
 
@@ -37,8 +37,8 @@ pfctl -f /etc/pf.conf
 
 # check that certificates were regenerated
 # only in this case also regenerate DH parameters
-sucess=`grep "/usr/local/etc/letsencrypt/live" $logfile | grep -Eo "succesful" | head -1`
-if [ "$sucess" = "succesful" ]; then
+sucess=`grep "/usr/local/etc/letsencrypt/live" $logfile | grep -Eo "success" | head -1`
+if [ "$sucess" = "success" ]; then
 ## Regenerate DH Parameters
   echo "Regenerate DH Parameters including smaller ones for postfix"
   openssl dhparam -out /werzel/certificates/www.werzel.de.dhparam.pem 4096
