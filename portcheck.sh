@@ -21,7 +21,7 @@ if [ "$fetchdata" = "1" ]; then
 fi
 
 echo "### ### Fetch Port Updates ### ###"
-portsnap fetch update >/dev/null
+/usr/sbin/portsnap fetch update
 
 echo "### ### Checking Root-System ### ###"
 pkg version -l "<"
