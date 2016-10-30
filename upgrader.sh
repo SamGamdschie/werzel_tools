@@ -70,6 +70,12 @@ for jailname in $jails
       jexec -n $jailname chown -R mail.werzel.de:www /usr/local/www/roundcube
       jexec -n $jailname chown -R squirrel.werzel:www /usr/local/www/squirrelmail
     fi
+    if [ "$jailname" = "admin" ]; then
+      echo "### ### Reset Dirs in $jailname back to used defaults ### ###"
+      jexec -n $jailname chown -R k5sch3l.werzel:www /usr/local/www/postfixadmin
+      jexec -n $jailname chown -R k5sch3l.werzel:www /usr/local/www/phpMyAdmin
+      jexec -n $jailname chown -R k5sch3l.werzel:www /usr/local/www/observium
+    fi
     # delete outdated ports data
     jexec -n $jailname find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
     jexec -n $jailname find /var/ports/distfiles/* -maxdepth 2 -mtime +30 -exec rm -rf {} \;
