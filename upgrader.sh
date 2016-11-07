@@ -79,16 +79,29 @@ for jailname in $jails
     # delete outdated ports data
     jexec -n $jailname find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
     jexec -n $jailname find /var/ports/distfiles/* -maxdepth 2 -mtime +30 -exec rm -rf {} \;
+    # now restart jail
+    echo "### ### Restart jail $jailname to get all new programs running ### ###"
+    ezjail-admin onerestart $jailname
+    # restart php afterwards
+    if [ "$jailname" = "www" ]; then
+      jexec -n $jailname service php-fpm restart
+    fi
+    if [ "$jailname" = "ssl" ]; then
+      jexec -n $jailname service php-fpm restart
+    fi
+    if [ "$jailname" = "admin" ]; then
+      jexec -n $jailname service php-fpm restart
+    fi
   fi
 
-  pkg version -l "<"
+  jexec -n $jailname pkg version -l "<"
   echo "Do you want check your packages on jail $jailname?? (y/N)"
   stty raw -echo
   char=`dd bs=1 count=1 2>/dev/null`
   stty -raw echo
   # Check Jail Repository
   if [ "$char" = "y" ]; then
-    pkg check -dsa
+    jexec -n $jailname pkg check -dsa
   fi
 
 done
