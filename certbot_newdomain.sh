@@ -17,12 +17,15 @@ fi
 if [ $dryrun =  1 ]; then
   # Normally start dry run to write log with domain info from cert
   # RENEWAL ONLY!
-  echo "Start Letsencrypt as Dry Run"
-  jexec -n letsencrypt certbot renew --dry-run
+  echo "Start Newdomain in Dry Run"
+  jexec -n letsencrypt certbot renew -n --dry-run
   echo ""
   echo ""
   echo "Please review domains from letsencrypt logfile:"
   echo "less /usr/jails/letsencrypt/var/log/letsencrypt/letsencrypt.log"
+  echo ""
+  echo "Restart certbot_nowdomain.sh with commas sperataed list of domains:"
+  echo "./certbot_newdomain.sh newcert example.com,example2.com,example3.com"
   echo ""
 else
   ## Redirect Port 443 to Jail Letsencrypt
@@ -32,7 +35,7 @@ else
   ### This will only be started with additional parameter: Add additional domain names to the list from cert.
   ### Enter domain list manually here
   echo "Start Letsencrypt to Extend Domain"
-  jexec -n letsencrypt certbot certonly --standalone --expand $2
+  jexec -n letsencrypt certbot certonly -n --standalone-supported-challenges tls-sni-01 --rsa-key-size 4096 --expand -d $2
 
   ## Redirect Port 443 back to Jail Proxy
   echo "Start Firewall with normal configuration"
@@ -40,4 +43,4 @@ else
 fi
 
 # Send mail with results
-echo "Ending Letsencrypt for new domains at `date`, sending mail with results"
+echo "Ending Newdomains at `date`"
