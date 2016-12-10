@@ -25,8 +25,11 @@ if [ $validdomain = 1 ]; then
 
   ### Directories and Permissions
   dir=/www/vhosts/$user
-  jexec -n $jail mkdir $dir
-  jexec -n $jail cd $dir && mkdir log sessions tmp htdocs
+  jexec -n $jail mkdir -p $dir
+  jexec -n $jail mkdir -p $dir/log
+  jexec -n $jail mkdir -p $dir/sessions
+  jexec -n $jail mkdir -p $dir/tmp
+  jexec -n $jail mkdir -p $dir/htdocs
   jexec -n $jail chown -R $user:$user $dir
   jexec -n $jail chown -R www:$user $dir/log
   jexec -n $jail chmod -R 770 $dir/log
