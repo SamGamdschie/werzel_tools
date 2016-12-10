@@ -32,7 +32,7 @@ else
   ### This will only be started with additional parameter: Add additional domain names to the list from cert.
   ### Enter domain list manually here
   echo "Start Letsencrypt to Extend Domain"
-  jexec -n letsencrypt certbot certonly --expand -d $2
+  jexec -n letsencrypt certbot certonly --standalone --expand $2
 
   ## Redirect Port 443 back to Jail Proxy
   echo "Start Firewall with normal configuration"
