@@ -33,6 +33,7 @@ if [ "$char" = "y" ]; then
   portupgrade -a
   csh -t rehash
   # delete outdated ports data
+  portsclean -CDLP
   find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
   find /var/ports/distfiles/* -maxdepth 1 -mtime +30 -exec rm -rf {} \;
   pkg update
@@ -77,6 +78,7 @@ for jailname in $jails
       jexec -n $jailname chown -R k5sch3l.werzel:www /usr/local/www/observium
     fi
     # delete outdated ports data
+    jexec -n $jailname portsclean -CDLP
     jexec -n $jailname find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
     jexec -n $jailname find /var/ports/distfiles/* -maxdepth 2 -mtime +30 -exec rm -rf {} \;
     # now restart jail
