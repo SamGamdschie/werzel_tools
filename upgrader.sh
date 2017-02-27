@@ -34,8 +34,6 @@ if [ "$char" = "y" ]; then
   csh -t rehash
   # delete outdated ports data
   portsclean -CDLP
-  find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
-  find /var/ports/distfiles/* -maxdepth 1 -mtime +30 -exec rm -rf {} \;
   pkg update
   csh -t rehash
 fi
@@ -79,8 +77,6 @@ for jailname in $jails
     fi
     # delete outdated ports data
     jexec -n $jailname portsclean -CDLP
-    jexec -n $jailname find /var/ports/usr/ports/* -maxdepth 1 -mtime +3 -exec rm -rf {} \;
-    jexec -n $jailname find /var/ports/distfiles/* -maxdepth 2 -mtime +30 -exec rm -rf {} \;
     # now restart jail
     echo "### ### Restart jail $jailname to get all new programs running ### ###"
     ezjail-admin onerestart $jailname

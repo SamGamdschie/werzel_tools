@@ -25,6 +25,7 @@ echo "### ### Fetch Port Updates ### ###"
 /usr/sbin/portsnap -I update
 
 echo "### ### Checking Root-System ### ###"
+pkg audit
 pkg version -l "<"
 pkg check -dsa
 
@@ -33,6 +34,7 @@ for jailname in $jails
   do
 
   echo "### ### Checking Jail $jailname ### ###"
+  jexec -n $jailname pkg audit
   jexec -n $jailname pkg version -l "<"
   jexec -n $jailname pkg check -dsa
 
