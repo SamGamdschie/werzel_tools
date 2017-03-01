@@ -27,8 +27,8 @@ portupgrade -fr ruby
 
 ## Via portmaster if PHP
 #change versions and origin accordingly!
-portmaster -o lang/php56 php5-5.4.45
-pkg info | grep php | grep 5.4 | awk '{print $1}' | awk -F '-5.4' '{print "whereis "$1}' | sh | awk -F ': /usr/ports/' '{print "portmaster -y -D -o "$2" "$1}' | sed -e "s@/php5-@/php56-@" -e 's@$@-5.4
+portmaster -o lang/php71 php56-5.6.30
+pkg info | grep php | grep 5.6 | awk '{print $1}' | awk -F '-5.6' '{print "whereis "$1}' | sh | awk -F ': /usr/ports/' '{print "portmaster -y -D -o "$2" "$1}' | sed -e "s@/php56-@/php71-@" -e 's@$@-5.6.30@' | sh
 portmaster -d -y pecl
 
 ## FreeBSD Upgrade

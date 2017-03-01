@@ -1,8 +1,21 @@
 # Werzel Tools
 Tools and Snippets for my FreeBSD administration
 
-### Scripts
+## Scripts
 
+### certbot_newdomain.sh
 
+### create_domain.sh
 
-### Snippets
+### letsencrypt.sh
+
+### logchk.sh
+
+### portcheck.sh
+
+### restartjails.sh
+
+### upgrader.sh
+
+## Snippets
+see SNIPPETS.md

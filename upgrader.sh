@@ -65,7 +65,7 @@ for jailname in $jails
     jexec -n $jailname csh -t rehash
     if [ "$jailname" = "ssl" ]; then
       echo "### ### Reset Dirs in $jailname back to used defaults ### ###"
-      jexec -n $jailname chown -R cloud.werzel.de:www /usr/local/www/owncloud
+      jexec -n $jailname chown -R cloud.werzel.de:www /usr/local/www/nextcloud
       jexec -n $jailname chown -R mail.werzel.de:www /usr/local/www/roundcube
       jexec -n $jailname chown -R squirrel.werzel:www /usr/local/www/squirrelmail
     fi
