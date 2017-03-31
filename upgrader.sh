@@ -36,6 +36,8 @@ if [ "$char" = "y" ]; then
   portsclean -CDLP
   pkg update
   csh -t rehash
+  pkg autoremove
+  csh -t rehash
 fi
 
 pkg version -l "<"
@@ -62,6 +64,8 @@ for jailname in $jails
   if [ "$char" = "y" ]; then
     #jexec -n $jailname pkg update // packages will be compiled from ports tree
     jexec -n $jailname portupgrade -a
+    jexec -n $jailname csh -t rehash
+    jexec -n $jailname pkg autoremove
     jexec -n $jailname csh -t rehash
     if [ "$jailname" = "ssl" ]; then
       echo "### ### Reset Dirs in $jailname back to used defaults ### ###"

@@ -32,10 +32,10 @@ if [ $validdomain = 1 ]; then
   jexec -n $jail mkdir -p $dir/htdocs
   jexec -n $jail chown -R $user:$user $dir
   jexec -n $jail chown -R www:$user $dir/log
-  jexec -n $jail chmod -R 770 $dir/log
-  jexec -n $jail chmod -R 770 $dir/tmp
-  jexec -n $jail chmod -R 700 $dir/sessions
-  jexec -n $jail chmod -R 750 $dir/htdocs
+  jexec -n $jail chmod -R 0770 $dir/log
+  jexec -n $jail chmod -R 0770 $dir/tmp
+  jexec -n $jail chmod -R 0700 $dir/sessions
+  jexec -n $jail chmod -R 0750 $dir/htdocs
 
   jexec -n $jail find $dir/htdocs/ -type d -exec chmod 550 {} \;
   jexec -n $jail find $dir/htdocs/ -type f -exec chmod 440 {} \;
