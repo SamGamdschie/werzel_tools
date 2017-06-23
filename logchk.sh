@@ -10,9 +10,9 @@ grep " [3-5]0[0-9] " /usr/jails/proxy/var/log/nginx-access.log | grep -v "thorst
 echo "#### NGINX PROXY #### ERROR ###"
 grep " [error] " /usr/jails/proxy/var/log/nginx-error.log | grep -v "thorsten\.werner" | grep -v "maraike\.tonzel"
 echo "#### NGINX CLOUD ####"
-grep " 40[0-9] " /usr/jails/ssl/www/vhosts/cloud.werzel.de/.log/nginx.access.log | grep -v "thorsten\.werner" | grep -v "maraike\.tonzel"
+grep " 40[0-9] " /usr/jails/ssl/www/vhosts/cloud.werzel.de/log/nginx.access.log | grep -v "thorsten\.werner" | grep -v "maraike\.tonzel"
 echo "#### NGINX WEBMAIL ####"
-grep " 40[0-9] " /usr/jails/ssl/www/vhosts/mail.werzel.de/.log/nginx.access.log
+grep " 40[0-9] " /usr/jails/ssl/www/vhosts/mail.werzel.de/log/nginx.access.log
 echo "#### NGINX LISTS ####"
 grep " 40[0-9] " /usr/jails/mail/var/log/nginx-access.log
 echo "#### POSTFIX ####"

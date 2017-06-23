@@ -24,6 +24,7 @@ portupgrade -fr mariadb101-client
 portupgrade -o databases/mariadb101-server -f mariadb100-server
 portupgrade -o lang/ruby23 -f ruby
 portupgrade -fr ruby
+portupgrade -o security/openssl -f libressl
 
 ## Via portmaster if PHP
 #change versions and origin accordingly!
@@ -200,3 +201,9 @@ https://stribika.github.io/2015/01/04/secure-secure-shell.html
 
 http://ohmyz.sh/community/
 https://tmuxcheatsheet.com/
+
+## macOS ##
+<CMD> + <Shift> + <.>
+
+defaults write com.apple.finder AppleShowAllFiles True
+killall Finder
