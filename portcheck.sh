@@ -41,7 +41,6 @@ for jailname in $jails
 done
 
 echo "### ### Now checking system status using LYNIS ### ###"
-
 lynis audit system
 
 echo "### ### Stopping Portcheck at `date`, sending mail with results ### ###"
