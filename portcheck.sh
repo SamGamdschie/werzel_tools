@@ -41,7 +41,8 @@ for jailname in $jails
 done
 
 echo "### ### Now checking system status using LYNIS ### ###"
-lynis audit system
+lynis audit system >/dev/null
+cat /var/log/lynis.log
 
 echo "### ### Stopping Portcheck at `date`, sending mail with results ### ###"
 grep -v "Upgrad" $tmplog | grep -v "^OK? \[no\]" | grep -v "^\[Reading data from pkg" | grep -v "packages found \- done" >$logfile
