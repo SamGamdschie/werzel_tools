@@ -31,3 +31,16 @@ grep "refused to talk to me" /usr/jails/mail/var/log/maillog
 mail -s "Result of Transmission Checker" $emailaddr <$logfile
 #Log sent, remove it.
 rm -f  $logfile
+
+logfile=/var/log/snortalert.log
+
+exec > $logfile
+exec 2>&1
+echo "Starting Snort Alert Checker at `date`, sending mail with results"
+echo "#### SNORT ####"
+/root/werzel_tools/snortLog.pl
+
+# Send mail with results
+mail -s "Result of Snort Alert Checker" $emailaddr <$logfile
+#Log sent, remove it.
+rm -rf $logfile
