@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 ###################################################################
 # author: Chad Brandt (chad@linux-bsd-central.com)
 #
