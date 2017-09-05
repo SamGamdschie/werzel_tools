@@ -40,7 +40,8 @@ for jailname in $jails
 
 done
 
-echo "### ### Now checking system status using LYNIS ### ###"
+echo "### ### Now checking system status and integrity ### ###"
+freebsd-update IDS
 lynis audit system >/dev/null
 cat /var/log/lynis.log
 

@@ -11,8 +11,8 @@ echo "#### NGINX PROXY #### ERROR ###"
 grep " [error] " /usr/jails/proxy/var/log/nginx/error.log
 echo "#### NGINX LISTS ####"
 grep " 4[0-9][0-9] " /usr/jails/mail/var/log/nginx-access.log
-echo "#### POSTFIX ####"
-grep "postfix\/smtpd.*connect .*" /usr/jails/mail/var/log/maillog | grep -v "werzel\.de" | grep -v "versanet\.de" | grep -v "disconnect" 
+#echo "#### POSTFIX ####"
+#grep "postfix\/smtpd.*connect .*" /usr/jails/mail/var/log/maillog | grep -v "werzel\.de" | grep -v "versanet\.de" | grep -v "disconnect"
 
 # Send mail with results
 mail -s "Result of Logchecker" $emailaddr <$logfile
