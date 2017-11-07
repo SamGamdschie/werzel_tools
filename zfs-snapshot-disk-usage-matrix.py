@@ -60,7 +60,7 @@ def maybe_ssh(host):
 def snapshots_in_creation_order(filesystem, host='localhost', strip_filesystem=False):
     "Return list of snapshots on FILESYSTEM in order of creation."
     result = []
-    cmd = "{} zfs list -r -t snapshot -s creation {} -o name".format(maybe_ssh(host), filesystem)
+    cmd = "{}zfs list -r -t snapshot -s creation {} -o name".format(maybe_ssh(host), filesystem)
     lines = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True).split('\n')
     snapshot_prefix = filesystem + "@"
     for line in lines:
@@ -72,7 +72,7 @@ def snapshots_in_creation_order(filesystem, host='localhost', strip_filesystem=F
 
 def space_between_snapshots(filesystem, first_snap, last_snap, host='localhost'):
     "Space used by a sequence of snapshots."
-    cmd = "{} zfs destroy -nv {}@{}%{} | grep \"would reclaim\"".format(maybe_ssh(host), filesystem, first_snap, last_snap)
+    cmd = "{}zfs destroy -nv {}@{}%{} | grep \"would reclaim\"".format(maybe_ssh(host), filesystem, first_snap, last_snap)
     lines = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True).split('\n')
     return lines[0].split()[-1]
 
