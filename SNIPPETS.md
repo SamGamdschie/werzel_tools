@@ -79,6 +79,7 @@ portsclean -CDLP
 
 ###ZFS
 zfs list -t all -o name,used,refer,written -r zroot
+zfs list -ro space |less
 zfs destroy -rv zroot@%
 zpool status
 zpool scrub <pool>

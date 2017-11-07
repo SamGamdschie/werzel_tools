@@ -40,6 +40,9 @@ for jailname in $jails
 
 done
 
+echo "### ### Now get some information about disk usage ### ###"
+zfs list -ro space
+
 echo "### ### Now checking system status and integrity ### ###"
 freebsd-update IDS
 lynis audit system >/dev/null
