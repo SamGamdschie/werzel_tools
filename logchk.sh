@@ -19,28 +19,36 @@ mail -s "Result of Logchecker" $emailaddr <$logfile
 #Log sent, remove it.
 rm -f  $logfile
 
-logfile=/var/log/transmission.log
+#Check for refused sendings
+count=grep -c "refused to talk to me" /usr/jails/mail/var/log/maillog
+if [ 0 < $count ] then
+  logfile=/var/log/transmission.log
 
-exec > $logfile
-exec 2>&1
-echo "Starting Transmission Checker at `date`, sending mail with results"
-echo "#### POSTFIX ####"
-grep "refused to talk to me" /usr/jails/mail/var/log/maillog
+  exec > $logfile
+  exec 2>&1
+  echo "Starting Transmission Checker at `date`, sending mail with results"
+  echo "#### POSTFIX ####"
+  grep "refused to talk to me" /usr/jails/mail/var/log/maillog
 
-# Send mail with results
-mail -s "Result of Transmission Checker" $emailaddr <$logfile
-#Log sent, remove it.
-rm -f  $logfile
+  # Send mail with results
+  mail -s "Result of Transmission Checker" $emailaddr <$logfile
+  #Log sent, remove it.
+  rm -f  $logfile
+fi
 
-logfile=/var/log/snortalert.log
+#Snort if needed
+/root/werzel_tools/snortLog.pl > /var/log/snort.log
+count=grep -c "\n" /var/log/snort.log
 
-exec > $logfile
-exec 2>&1
-echo "Starting Snort Alert Checker at `date`, sending mail with results"
-echo "#### SNORT ####"
-/root/werzel_tools/snortLog.pl
-
-# Send mail with results
-mail -s "Result of Snort Alert Checker" $emailaddr <$logfile
-#Log sent, remove it.
-rm -rf $logfile
+if [ 2 < $count ] then
+  logfile=/var/log/snortalert.log
+  exec > $logfile
+  exec 2>&1
+  echo "Starting Snort Alert Checker at `date`, sending mail with results"
+  echo "#### SNORT ####"
+  cat /var/log/snort.log
+  # Send mail with results
+  mail -s "Result of Snort Alert Checker" $emailaddr <$logfile
+  #Log sent, remove it.
+  rm -rf $logfile
+fi
