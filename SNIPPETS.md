@@ -26,6 +26,11 @@ portupgrade -o lang/ruby23 -f ruby
 portupgrade -fr ruby
 portupgrade -o security/openssl -f libressl
 
+pkg set -n py27-setuptools27:py27-setuptools
+cd /usr/ports/devel/py-setuptools
+make deinstall && make reinstall
+
+
 ## Via portmaster if PHP
 #change versions and origin accordingly!
 portmaster -o lang/php71 php56-5.6.30

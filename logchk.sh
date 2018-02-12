@@ -21,7 +21,7 @@ rm -f  $logfile
 
 #Check for refused sendings
 count=grep -c "refused to talk to me" /usr/jails/mail/var/log/maillog
-if [ 0 < $count ] then
+if [ 1 < $count ]; then
   logfile=/var/log/transmission.log
 
   exec > $logfile
@@ -40,7 +40,7 @@ fi
 /root/werzel_tools/snortLog.pl > /var/log/snort.log
 count=grep -c "\n" /var/log/snort.log
 
-if [ 2 < $count ] then
+if [ 2 < $count ]; then
   logfile=/var/log/snortalert.log
   exec > $logfile
   exec 2>&1
