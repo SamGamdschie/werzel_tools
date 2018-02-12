@@ -29,17 +29,19 @@ if [ $dryrun =  1 ]; then
   echo ""
 else
   ## Redirect Port 443 to Jail Letsencrypt
+  echo "Please run the commands manually!"
   echo "Start Firewall with 443 to letsencrypt"
-  pfctl -f /etc/pf-letsencrypt.conf
+  echo "pfctl -f /etc/pf-letsencrypt.conf"
 
   ### This will only be started with additional parameter: Add additional domain names to the list from cert.
   ### Enter domain list manually here
   echo "Start Letsencrypt to Extend Domain"
-  jexec -n letsencrypt certbot certonly -n --standalone --standalone-supported-challenges tls-sni-01 --rsa-key-size 4096 --expand -d $2
+  echo "jexec -n letsencrypt certbot certonly -n --standalone --preferred-challenges http --rsa-key-size 4096 --expand -d $2"
 
   ## Redirect Port 443 back to Jail Proxy
   echo "Start Firewall with normal configuration"
-  pfctl -f /etc/pf.conf
+  echo "pfctl -f /etc/pf.conf"
+  echo "Do NOT forget the last one! and heck results"
 fi
 
 # Send mail with results
