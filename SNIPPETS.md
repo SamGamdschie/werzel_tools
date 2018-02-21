@@ -90,6 +90,10 @@ zpool status
 zpool scrub <pool>
 gpart bootcode -b /boot/pmbr -b /boot/gptzfsboot -i 1 ada0
 
+zpool get listsnapshots tank
+zpool set listsnapshots=on|off zroot
+zfs list -t snapshot
+
 ##HUKL
 https://github.com/hukl/freebsd-toolbox/blob/master/commands.md
 
