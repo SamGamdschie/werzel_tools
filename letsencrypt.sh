@@ -1,6 +1,5 @@
 #!/usr/local/bin/zsh
 logfile=/var/log/letsencrypt.log
-#emailaddr=root@mail.werzel.de
 emailaddr=server.mail@werzel.de
 
 #letsencrypt dryrun
@@ -14,43 +13,36 @@ rm -f  $logfile
 
 exec > $logfile
 exec 2>&1
-echo "Starting Letsencrypt at `date`"
-
-## Redirect Port 443 to Jail Letsencrypt
-echo "Start Firewall with 443 to letsencrypt"
-pfctl -f /etc/pf-letsencrypt.conf
+echo "Starting Letsencrypt via ACME.SH at `date`"
 
 # Generate new certificates (up to 100 domains / subdomains per request, only 5 requests per week!)
 echo "Start Letsencrypt in Renewal Mode"
-# Mail and mail related
-#jexec -n letsencrypt letsencrypt certonly --duplicate --renew-by-default -c /etc/letsencrypt/cli.ini -d mail.werzel.de -d webmail.werzel.de -d squirrel.werzel.de -d automx.werzel.de -d autoconfig.werzel.de -d autodiscover.werzel.de
 # RENEWAL ONLY!
 if [ "1" = "$dryrun" ]; then
-  jexec -n letsencrypt certbot renew -n --dry-run
+  #jexec -n letsencrypt certbot renew -n --dry-run
+  jexec -n letsencrypt acme.sh --home /var/db/acme/.acme.sh/ --cron --test
 else
-  jexec -n letsencrypt certbot renew -n --rsa-key-size 4096
+  #jexec -n letsencrypt certbot renew -n --rsa-key-size 4096
+  jexec -n letsencrypt acme.sh --home /var/db/acme/.acme.sh/ --cron --always-force-new-domain-key
 fi
-
-## Redirect Port 443 back to Jail Proxy
-echo "Start Firewall with normal configuration"
-pfctl -f /etc/pf.conf
+#
 
 # check that certificates were regenerated
 # only in this case also regenerate DH parameters
-sucess=`grep "/usr/local/etc/letsencrypt/live" $logfile | grep -Eo "success" | head -1`
+sucess=`grep "Cert success." $logfile | grep -Eo "success" | head -1`
 if [ "$sucess" = "success" ]; then
 ## Regenerate DH Parameters
   echo "Regenerate DH Parameters including smaller ones for postfix"
-  openssl dhparam -out /werzel/certificates/www.werzel.de.dhparam.pem 4096
-  openssl dhparam -out /werzel/certificates/cloud.werzel.de.dhparam.pem 4096
+  openssl dhparam -out /werzel/certificates/werzel.de.dhparam.pem 4096
   openssl dhparam -out /werzel/certificates/k5sch3l.werzel.de.dhparam.pem 4096
   openssl dhparam -out /werzel/certificates/mail.werzel.de.dhparam.pem 4096
   openssl dhparam -out /werzel/certificates/mail.werzel.de.512.pem 512
   openssl dhparam -out /werzel/certificates/mail.werzel.de.1024.pem 1024
   openssl dhparam -out /werzel/certificates/mail.werzel.de.2048.pem 2048
-  openssl dhparam -out /werzel/certificates/lists.seeadler.org.dhparam.pem 4096
-  openssl dhparam -out /werzel/certificates/www.hobbingen.de.dhparam.pem 4096
-  openssl dhparam -out /werzel/certificates/www.seeadler.org.dhparam.pem 4096
+  openssl dhparam -out /werzel/certificates/hobbingen.de.dhparam.pem 4096
+  openssl dhparam -out /werzel/certificates/seeadler.org.dhparam.pem 4096
+  openssl dhparam -out /werzel/certificates/bist.gmbh.dhparam.pem 4096
+  openssl dhparam -out /werzel/certificates/knappemail.de.dhparam.pem 4096
 
   ## Stop Proxy and remove cache
   echo "Stop Proxy, delete cache"
@@ -73,8 +65,25 @@ if [ "$sucess" = "success" ]; then
   jexec -n mail service postfix restart
   jexec -n mail service dovecot restart
 
+
 fi
 
 # Send mail with results
 echo "Ending Letsencrypt at `date`, sending mail with results"
 mail -s "Result of Letsencrypt" $emailaddr <$logfile
+
+## openssl x509 -text -noout -in cert.pem | grep DNS
+## acme.sh --home /var/db/acme/.acme.sh/ --keylength 4096 --dns dns_inwx --issue -d
+## acme.sh --home /var/db/acme/.acme.sh/ --cron > /dev/null
+## acme.sh --home /var/db/acme/.acme.sh/ --remove -d
+## --keylength ec-256|ec-384
+## -d *.example.com
+## --test
+##
+# -d k5sch3l.werzel.de
+# -d werzel.de -d *.werzel.de
+# -d mail.werzel.de -d webmail.werzel.de -d squirrel.werzel.de -d autoconfig.werzel.de -d autodiscover.werzel.de -d automx.werzel.de -d lists.chemiker-hh.de -d lists.hobbingen.de -d lists.werzel.de
+# -d hobbingen.de -d *.hobbingen.de
+# -d seeadler.org -d *.seeadler.org
+# -d knappemail.de -d *.knappemail.de
+# -d bist.gmbh -d bist-gmbh.de -d *.bist.gmbh -d *.bist-gmbh.de -d bist.werzel.de
