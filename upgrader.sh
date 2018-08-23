@@ -33,7 +33,7 @@ if [ "$char" = "y" ]; then
   portmaster -adwv
   csh -t rehash
   # delete outdated ports data
-  portsclean -iCDDLPP
+  portsclean -CDDLPP
   pkg update
   csh -t rehash
   pkg autoremove
@@ -65,7 +65,7 @@ for jailname in $jails
     #jexec -n $jailname pkg update // packages will be compiled from ports tree
     jexec -n $jailname portmaster -adwv
     jexec -n $jailname csh -t rehash
-    jexec -n $jailname portsclean -iCDDLPP
+    jexec -n $jailname portsclean -CDDLPP
     jexec -n $jailname csh -t rehash
     jexec -n $jailname pkg autoremove
     jexec -n $jailname csh -t rehash
