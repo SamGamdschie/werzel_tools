@@ -30,10 +30,10 @@ stty -raw echo
 # Update Root Repository
 if [ "$char" = "y" ]; then
   freebsd-update install
-  portupgrade -a
+  portmaster -adwv
   csh -t rehash
   # delete outdated ports data
-  portsclean -CDLP
+  portsclean -iCDDLPP
   pkg update
   csh -t rehash
   pkg autoremove
@@ -63,7 +63,9 @@ for jailname in $jails
   # Update Jail Repository
   if [ "$char" = "y" ]; then
     #jexec -n $jailname pkg update // packages will be compiled from ports tree
-    jexec -n $jailname portupgrade -a
+    jexec -n $jailname portmaster -adwv
+    jexec -n $jailname csh -t rehash
+    jexec -n $jailname portsclean -iCDDLPP
     jexec -n $jailname csh -t rehash
     jexec -n $jailname pkg autoremove
     jexec -n $jailname csh -t rehash

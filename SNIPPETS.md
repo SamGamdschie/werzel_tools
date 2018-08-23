@@ -14,6 +14,14 @@ portupgrade -a
 portupgrade -rfa
 
 ### Port-Managment
+portmaster -af
+
+env DISABLE_CONFLICTS=1
+
+portmaster -o lang/perl5.24 perl5.14
+-o	_new port dir in /usr/ports_ _installed	port_
+	 replace the installed port with a port	from a different origin
+
 portupgrade -ran
 env DISABLE_CONFLICTS=1
 portupgrade -o lang/perl5.24 -f perl5.14
