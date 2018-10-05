@@ -23,12 +23,12 @@ fi
 
 echo "### ### Checking Root-System ### ###"
 pkg version -l "<"
-echo "Do you want install updates on root system?? (y/N)"
+echo "Do you want install updates on root system?? (Y/n)"
 stty raw -echo
 char=`dd bs=1 count=1 2>/dev/null`
 stty -raw echo
 # Update Root Repository
-if [ "$char" = "y" ]; then
+if [ "$char" != "n" ]; then
   freebsd-update install
   portmaster -adwv
   csh -t rehash
@@ -56,12 +56,12 @@ for jailname in $jails
 
   echo "### ### Checking Jail $jailname ### ###"
   jexec -n $jailname pkg version -l "<"
-  echo "Do you want install updates on jail $jailname?? (y/N)"
+  echo "Do you want install updates on jail $jailname?? (Y/n)"
   stty raw -echo
   char=`dd bs=1 count=1 2>/dev/null`
   stty -raw echo
   # Update Jail Repository
-  if [ "$char" = "y" ]; then
+  if [ "$char" != "n" ]; then
     #jexec -n $jailname pkg update // packages will be compiled from ports tree
     jexec -n $jailname portmaster -adwv
     jexec -n $jailname csh -t rehash
