@@ -10,8 +10,8 @@ freebsd-update rollback
 ### Portsnap
 portsnap fetch update
 pkg2ng
-portupgrade -a
-portupgrade -rfa
+portmaster -af
+portmaster -afd
 
 ### Port-Managment
 portmaster -af
@@ -46,13 +46,13 @@ pkg info | grep php | grep 5.6 | awk '{print $1}' | awk -F '-5.6' '{print "where
 portmaster -d -y pecl
 
 ## FreeBSD Upgrade
-###First upgrade all software on host
+### First upgrade all software on host
 freebsd-update fetch
 freebsd-update install
 portsnap fetch update
 portupgrade -a
-###Install new version on Host
-/usr/sbin/freebsd-update upgrade -r 11.1-RELEASE
+### Install new version on Host
+/usr/sbin/freebsd-update upgrade -r 11.2-RELEASE
 /usr/sbin/freebsd-update install
 /sbin/shutdown -r now
 /usr/sbin/freebsd-update install
@@ -62,7 +62,7 @@ portsnap fetch update
 portupgrade -rfa
 /usr/sbin/freebsd-update install
 /sbin/shutdown -r now
-####Now on the current release on host! some later tasks
+#### Now on the current release on host! some later tasks
 /usr/sbin/freebsd-update fetch
 /usr/sbin/freebsd-update install
 pwd_mkdb -p /etc/master.passwd
@@ -71,10 +71,10 @@ less /root/.vim/.openzsh
 zpool upgrade <pool>
 zfs upgrade -r <pool>
 /sbin/shutdown -r now
-####Now upgrade Jails
+#### Now upgrade Jails
 ezjail-admin install
 rm -rf /usr/src/* /usr/src/.*
-svn checkout https://svn.freebsd.org/base/releng/11.1/ /usr/src
+svn checkout https://svn.freebsd.org/base/releng/11.2/ /usr/src
 svn update /usr/src
 mergemaster -p -D /usr/jails/db
 mergemaster -p -D /usr/jails/mail
@@ -82,15 +82,15 @@ mergemaster -p -D /usr/jails/...
 ezjail-admin onestart
 jexec -n ### su
 pkg-static install -f pkg
-portupgrade -rfa (in all jails)
+portmaster -fad (in all jails)
 /sbin/shutdown -r now
 less /root/.vim/.openzsh
-####Optional clean up
+#### Optional clean up
 pkg audit
 pkg autoremove
 portsclean -CDLP
 
-###ZFS
+### ZFS
 zfs list -t all -o name,used,refer,written -r zroot
 zfs list -ro space |less
 zfs destroy -rv zroot@%
@@ -102,7 +102,7 @@ zpool get listsnapshots tank
 zpool set listsnapshots=on|off zroot
 zfs list -t snapshot
 
-##HUKL
+## HUKL
 https://github.com/hukl/freebsd-toolbox/blob/master/commands.md
 
 ##SOURCE##
@@ -127,7 +127,7 @@ cp /usr/jails/ssl/etc/localtime /usr/jails/newjail/etc/localtime
 rm /usr/jails/newjail/usr/ports
 mkdir -p /usr/jails/newjail/usr/ports
 
-##Sendmail als Mailqueue (for non-mail jails)
+## Sendmail als Mailqueue (for non-mail jails)
 cd /etc/mail
 make
 vi $hostname.submit.mc
@@ -195,7 +195,7 @@ openssl x509 -text -noout -in
 
 ssh-keygen -t ed25519 -o -a 100
 ssh-keygen -t rsa -b 4096 -o -a 100
-#Keyagent under MacOS
+# Keyagent under MacOS
 ssh-add -K key_name
 ssh-add -l
 
