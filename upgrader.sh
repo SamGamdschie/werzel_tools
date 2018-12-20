@@ -30,7 +30,7 @@ stty -raw echo
 # Update Root Repository
 if [ "$char" != "n" ]; then
   freebsd-update install
-  portmaster -adwv
+  portmaster -adwvy
   csh -t rehash
   # delete outdated ports data
   portsclean -CDDLPP
@@ -63,7 +63,7 @@ for jailname in $jails
   # Update Jail Repository
   if [ "$char" != "n" ]; then
     #jexec -n $jailname pkg update // packages will be compiled from ports tree
-    jexec -n $jailname portmaster -adwv
+    jexec -n $jailname portmaster -adwvy
     jexec -n $jailname csh -t rehash
     jexec -n $jailname portsclean -CDDLPP
     jexec -n $jailname csh -t rehash
