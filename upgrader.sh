@@ -36,7 +36,7 @@ if [ "$char" != "n" ]; then
   portsclean -CDDLPP
   pkg update
   csh -t rehash
-  pkg autoremove
+  pkg autoremove -y
   csh -t rehash
 fi
 
@@ -67,7 +67,7 @@ for jailname in $jails
     jexec -n $jailname csh -t rehash
     jexec -n $jailname portsclean -CDDLPP
     jexec -n $jailname csh -t rehash
-    jexec -n $jailname pkg autoremove
+    jexec -n $jailname pkg autoremove -y
     jexec -n $jailname csh -t rehash
     if [ "$jailname" = "ssl" ]; then
       echo "### ### Reset Dirs in $jailname back to used defaults ### ###"
