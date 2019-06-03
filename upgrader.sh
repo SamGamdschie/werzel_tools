@@ -80,8 +80,6 @@ for jailname in $jails
       jexec -n $jailname chown -R k5sch3l.werzel:www /usr/local/www/phpMyAdmin
       jexec -n $jailname chown -R k5sch3l.werzel:www /usr/local/www/icingaweb2
     fi
-    # delete outdated ports data
-    jexec -n $jailname portsclean -CDLP
     # now restart jail
     echo "### ### Restart jail $jailname to get all new programs running ### ###"
     ezjail-admin onerestart $jailname
