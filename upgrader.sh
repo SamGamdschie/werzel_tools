@@ -33,10 +33,10 @@ if [ "$char" != "n" ]; then
   portmaster -adwvy
   csh -t rehash
   # delete outdated ports data
-  portsclean -CDDLPP
   pkg update
   csh -t rehash
   pkg autoremove -y
+  portmaster -y --clean-distfiles
   csh -t rehash
 fi
 
@@ -63,11 +63,10 @@ for jailname in $jails
   # Update Jail Repository
   if [ "$char" != "n" ]; then
     #jexec -n $jailname pkg update // packages will be compiled from ports tree
-    jexec -n $jailname portmaster -adwvy
-    jexec -n $jailname csh -t rehash
-    jexec -n $jailname portsclean -CDDLPP
+    jexec -n $jailname portmaster -adwvy --delete-build-only
     jexec -n $jailname csh -t rehash
     jexec -n $jailname pkg autoremove -y
+    jexec -n $jailname portmaster -y --clean-distfiles
     jexec -n $jailname csh -t rehash
     if [ "$jailname" = "ssl" ]; then
       echo "### ### Reset Dirs in $jailname back to used defaults ### ###"
