@@ -22,21 +22,11 @@ portmaster -o lang/perl5.24 perl5.14
 -o	_new port dir in /usr/ports_ _installed	port_
 	 replace the installed port with a port	from a different origin
 
-portupgrade -ran
-env DISABLE_CONFLICTS=1
-portupgrade -o lang/perl5.24 -f perl5.14
-portupgrade -fr perl
-portupgrade -o databases/postgresql95-client -f postgresql90-client
-portupgrade -o databases/mariadb101-client -f mariadb100-client
-portupgrade -fr mariadb101-client
-portupgrade -o databases/mariadb101-server -f mariadb100-server
-portupgrade -o lang/ruby23 -f ruby
-portupgrade -fr ruby
-portupgrade -o security/openssl -f libressl
+portmaster -r perl5.24
 
-pkg set -n py27-setuptools27:py27-setuptools
-cd /usr/ports/devel/py-setuptools
-make deinstall && make reinstall
+DO NOT FORGET TO CHANGE /etc/make.conf !!
+
+env DISABLE_CONFLICTS=1
 
 
 ## Via portmaster if PHP
@@ -50,7 +40,7 @@ portmaster -d -y pecl
 freebsd-update fetch
 freebsd-update install
 portsnap fetch update
-portupgrade -a
+portmaster -fad
 ### Install new version on Host
 /usr/sbin/freebsd-update upgrade -r 11.2-RELEASE
 /usr/sbin/freebsd-update install
@@ -59,7 +49,7 @@ portupgrade -a
 less /usr/src/UPDATING
 pkg-static install -f pkg
 portsnap fetch update
-portupgrade -rfa
+portmaster -fad
 /usr/sbin/freebsd-update install
 /sbin/shutdown -r now
 #### Now on the current release on host! some later tasks
@@ -87,8 +77,8 @@ portmaster -fad (in all jails)
 less /root/.vim/.openzsh
 #### Optional clean up
 pkg audit
-pkg autoremove
-portsclean -CDLP
+pkg autoremove -y
+portmaster -y --clean-dist-files
 
 ### ZFS
 zfs list -t all -o name,used,refer,written -r zroot
