@@ -2,46 +2,53 @@
 Tools and Snippets for my FreeBSD administration
 
 ## Snippets
- #! /bin/nosh
+```
+#! /bin/nosh
 freebsd-update fetch
 freebsd-update install
 freebsd-update rollback
+```
 
 ### Portsnap
+```
 portsnap fetch update
 pkg2ng
 portmaster -af
 portmaster -afd
+```
 
 ### Port-Managment
-portmaster -af
+`portmaster -af`
 
-env DISABLE_CONFLICTS=1
+`env DISABLE_CONFLICTS=1`
 
-portmaster -o lang/perl5.24 perl5.14
--o	_new port dir in /usr/ports_ _installed	port_
-	 replace the installed port with a port	from a different origin
+`portmaster -o lang/perl5.24 perl5.14`
 
-portmaster -r perl5.24
+`-o	_new port dir in /usr/ports_ _installed	port_
+	 replace the installed port with a port	from a different origin`
+
+`portmaster -r perl5.24`
 
 DO NOT FORGET TO CHANGE /etc/make.conf !!
 
-env DISABLE_CONFLICTS=1
-
-
 ## Via portmaster if PHP
+```
 #change versions and origin accordingly!
 portmaster -o lang/php71 php56-5.6.30
 pkg info | grep php | grep 5.6 | awk '{print $1}' | awk -F '-5.6' '{print "whereis "$1}' | sh | awk -F ': /usr/ports/' '{print "portmaster -y -D -o "$2" "$1}' | sed -e "s@/php56-@/php71-@" -e 's@$@-5.6.30@' | sh
 portmaster -d -y pecl
+```
 
 ## FreeBSD Upgrade
 ### First upgrade all software on host
+```
 freebsd-update fetch
 freebsd-update install
 portsnap fetch update
 portmaster -fad
+```
 ### Install new version on Host
+```
 /usr/sbin/freebsd-update upgrade -r 11.2-RELEASE
 /usr/sbin/freebsd-update install
 /sbin/shutdown -r now
@@ -52,7 +59,9 @@ portsnap fetch update
 portmaster -fad
 /usr/sbin/freebsd-update install
 /sbin/shutdown -r now
+```
 #### Now on the current release on host! some later tasks
+```
 /usr/sbin/freebsd-update fetch
 /usr/sbin/freebsd-update install
 pwd_mkdb -p /etc/master.passwd
@@ -61,7 +70,9 @@ less /root/.vim/.openzsh
 zpool upgrade <pool>
 zfs upgrade -r <pool>
 /sbin/shutdown -r now
+```
 #### Now upgrade Jails
+```
 ezjail-admin install
 rm -rf /usr/src/* /usr/src/.*
 svn checkout https://svn.freebsd.org/base/releng/11.2/ /usr/src
@@ -75,12 +86,16 @@ pkg-static install -f pkg
 portmaster -fad (in all jails)
 /sbin/shutdown -r now
 less /root/.vim/.openzsh
+```
 #### Optional clean up
+```
 pkg audit
 pkg autoremove -y
 portmaster -y --clean-dist-files
+```
 
 ### ZFS
+```
 zfs list -t all -o name,used,refer,written -r zroot
 zfs list -ro space |less
 zfs destroy -rv zroot@%
@@ -91,15 +106,19 @@ gpart bootcode -b /boot/pmbr -b /boot/gptzfsboot -i 1 ada0
 zpool get listsnapshots tank
 zpool set listsnapshots=on|off zroot
 zfs list -t snapshot
+```
 
 ## HUKL
 https://github.com/hukl/freebsd-toolbox/blob/master/commands.md
 
 ##SOURCE##
+```
 svn checkout http://svn.freebsd.org/base/releng/10.1/ /usr/src
 svn update /usr/src
+```
 
 ### ezjail
+```
 ezjail-admin
 ezjail-admin list
 ezjail-admin onestart
@@ -116,8 +135,10 @@ cp /usr/jails/ssl/etc/resolv.conf /usr/jails/newjail/etc/resolv.conf
 cp /usr/jails/ssl/etc/localtime /usr/jails/newjail/etc/localtime
 rm /usr/jails/newjail/usr/ports
 mkdir -p /usr/jails/newjail/usr/ports
+```
 
 ## Sendmail als Mailqueue (for non-mail jails)
+```
 cd /etc/mail
 make
 vi $hostname.submit.mc
@@ -129,20 +150,28 @@ sendmail_msp_queue_enable="YES"
 sendmail_outbound_enable="NO"
 sendmail_submit_enable="YES"
 cd /etc/mail && make stop && make start
+```
 
 ## Firewall
+```
 tcpdump -n -e -ttt -i pflog0
  #! /bin/sh
+```
 
 ### Passwordschutz
+```
 perl -le 'print crypt ("password", "salt")'
 echo "user:passwordhash:comment"
+```
 
 ### User Management
+```
 pw user add example.com -s /sbin/nologin
 pw group mod example.com -m www
+```
 
 ### Directories and Permissions
+```
 mkdir /www/vhosts/example.com
 cd /www/vhosts/example.com
 mkdir log sessions tmp htdocs
@@ -155,14 +184,20 @@ chmod -R 750 htdocs
 
 find . -type d -exec chmod 550 {} \;
 find . -type f -exec chmod 440 {} \;
+```
 
 ### Wordpress ###
+```
 https://wordpress.org/plugins/better-wp-security/
+```
 
 ### Nginx Cache
+```
 find /tmp/nginx/cache -type f -delete
+```
 
 ### Let's Encrypt Feature and Settings
+```
 /etc/letsencrypt/live/$domain
 /etc/letsencrypt/archive
 /etc/letsencrypt/keys
@@ -173,14 +208,18 @@ email = foo@example.com
 authenticator = standalone
 standalone-supported-challenges = http-01
  -d thing.com -d www.thing.com -d otherthing.net
+```
 
 ### pf
+```
 pfctl -f pf-letsencrypt.conf
 pfctl -f pf.conf
 pfctl -t werzelhome -T show
 pfctl -t werzelhome -T flush
 pfctl -t bruteforce -T delete 1.1.1.1
+```
 
+```
 openssl x509 -text -noout -in
 
 ssh-keygen -t ed25519 -o -a 100
@@ -188,8 +227,10 @@ ssh-keygen -t rsa -b 4096 -o -a 100
 # Keyagent under MacOS
 ssh-add -K key_name
 ssh-add -l
+```
 
 ## NEW SECURE SECURE SHELL
+```
 Protocol 2
 HostKey /etc/ssh/ssh_host_ed25519_key
 HostKey /etc/ssh/ssh_host_rsa_key
@@ -204,6 +245,7 @@ ChallengeResponseAuthentication no
 PubkeyAuthentication yes
 Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com
+```
 
 https://stribika.github.io/2015/01/04/secure-secure-shell.html
 
@@ -211,7 +253,9 @@ http://ohmyz.sh/community/
 https://tmuxcheatsheet.com/
 
 ## macOS ##
+```
 <CMD> + <Shift> + <.>
 
 defaults write com.apple.finder AppleShowAllFiles True
 killall Finder
+```
