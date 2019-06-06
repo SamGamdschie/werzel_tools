@@ -5,7 +5,7 @@ logfile=/var/log/portcheck.log
 tmplog=/var/log/portcheck.tmp.log
 #emailaddr=root@mail.werzel.de
 emailaddr=server.mail@werzel.de
-fetchtdata=1
+fetchtdata=$1
 
 ## Start logging
 rm -rf $logfile
@@ -13,21 +13,21 @@ exec > $tmplog
 exec 2>&1
 echo "### ### Starting Portcheck at `date` ### ###"
 
-if [ "$fetchdata" = "1" ]; then
+if [ "$fetchdata" != "no" ]; then
 # Update Root Repository
   echo "### ### Fetch FreeBSD and Source Updates ### ###"
   freebsd-update -t root@mail.werzel.de cron
   svn update /usr/src >/dev/null
-fi
 
-echo "### ### Fetch Port Updates ### ###"
-/usr/sbin/portsnap cron
-/usr/sbin/portsnap -I update
+  echo "### ### Fetch Port Updates ### ###"
+  /usr/sbin/portsnap cron
+  /usr/sbin/portsnap -I update
+fi
 
 echo "### ### Checking Root-System ### ###"
 pkg audit
 pkg version -l "<"
-pkg check -dsa
+pkg check -Bdsan
 
 # Now update in all jails
 for jailname in $jails
@@ -36,7 +36,7 @@ for jailname in $jails
   echo "### ### Checking Jail $jailname ### ###"
   jexec -n $jailname pkg audit
   jexec -n $jailname pkg version -l "<"
-  jexec -n $jailname pkg check -dsa
+  jexec -n $jailname pkg check -Bdsan
 
 done
 
