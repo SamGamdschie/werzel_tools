@@ -49,7 +49,7 @@ portmaster -fad
 ```
 ### Install new version on Host
 ```
-/usr/sbin/freebsd-update upgrade -r 11.2-RELEASE
+/usr/sbin/freebsd-update upgrade -r 11.4-RELEASE
 /usr/sbin/freebsd-update install
 /sbin/shutdown -r now
 /usr/sbin/freebsd-update install
@@ -66,7 +66,7 @@ portmaster -fad
 /usr/sbin/freebsd-update install
 pwd_mkdb -p /etc/master.passwd
 mergemaster -p
-less /root/.vim/.openzsh
+cat /root/.vim/.openzsh
 zpool upgrade <pool>
 zfs upgrade -r <pool>
 /sbin/shutdown -r now
@@ -75,7 +75,7 @@ zfs upgrade -r <pool>
 ```
 ezjail-admin install
 rm -rf /usr/src/* /usr/src/.*
-svn checkout https://svn.freebsd.org/base/releng/11.2/ /usr/src
+svn checkout https://svn.freebsd.org/base/releng/11.4/ /usr/src
 svn update /usr/src
 mergemaster -p -D /usr/jails/db
 mergemaster -p -D /usr/jails/mail
@@ -83,9 +83,8 @@ mergemaster -p -D /usr/jails/...
 ezjail-admin onestart
 jexec -n ### su
 pkg-static install -f pkg
-portmaster -fad (in all jails)
-/sbin/shutdown -r now
-less /root/.vim/.openzsh
+portmaster --packages-build --delete-build-only -fdwa (in all jails)
+ezjail-admin onerestart
 ```
 #### Optional clean up
 ```
